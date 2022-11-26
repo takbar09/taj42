@@ -9,13 +9,15 @@
 /*   Updated: 2022/11/06 13:34:05 by takbar        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdlib.h>
+#include <stdio.h>
 int ft_count_word(char const *s, char c)
 {
 	int i;
 	int cnt;
 	i = 0;
 	cnt = 0;
-	while ([s[i])
+	while (s[i])
 	{
 		if (s[i] == c)
 		i++;
@@ -55,8 +57,8 @@ char **ft_split2(char **res, char const *s, char c, int num_word)
 			k++;
 			word_len++;
 		}
-		if (!(res[i] = char *)malloc(sizeof(char)*(word_len + 1)))
-		return(NULL);
+		if (!(res[i] = (char *)malloc(sizeof(char) * (word_len + 1))))
+		return (NULL);
 		ft_word_make(res[i], s, k, word_len);
 		word_len = 0;
 		i++;
@@ -68,12 +70,12 @@ char **ft_split2(char **res, char const *s, char c, int num_word)
 char	**ft_split(const char *s, char c)
 {
 	int num_word;
-	char res;
+	char **res;
 
 	if (s == 0)
 	return (NULL);
-	num_word = ft_word_count(s, c);
-	if (!(res = (char **)malloc(sizeof(char*)*(num_word + 1))))
+	num_word = ft_count_word(s, c);
+	if (!(res = (char **)malloc(sizeof(char *) * (num_word + 1))))
 	return (NULL);
 	ft_split2(res, s, c, num_word);
 	return (res);
@@ -81,7 +83,7 @@ char	**ft_split(const char *s, char c)
 
 int main(void)
 {
-	printf ("ft_split\n");
+	printf ("===ft_split===\n");
 	char **a = ft_split("codam_student_taj",'_');
 	for(int i=0; i<3; i++)
 	printf("%s\n",a[i]);
