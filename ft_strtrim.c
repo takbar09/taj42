@@ -27,3 +27,15 @@ char		*ft_strtrim(char const *s)
 	str[k] = '\0';
 	return (str);
 }
+
+/*
+**int	main(void)
+**{
+**	printf("====ft_strtrim====\n");
+**	printf("====BCDEF====\n");
+**	printf("%s\n", ft_strtrim("ABCDEF", "EAC"));
+**	printf("====BCD====\n");
+**	printf("%s\n", ft_strtrim("ABCDEF", "AFE"));
+**	return (0);
+**}
+*/
