@@ -18,6 +18,6 @@ int stack_smallest_index(struct stack *s);
 int stack_largest_index(struct stack *s);
 
 // to be removed later.
-int print_stacks(struct stack *a, struct stack *b);
+//int print_stacks(struct stack *a, struct stack *b);
 
 #endif

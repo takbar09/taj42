@@ -30,7 +30,6 @@ int push(struct stack *s, int number)
 int pop(struct stack *s, int *number)
 {
     int i;
-    int j;
 
     if (s->count <= 0)
         return -1;
@@ -102,7 +101,8 @@ int stack_largest_index(struct stack *s)
     return largest_index;
 }
 
-int print_stacks(struct stack *a, struct stack *b)
+/*
+void print_stacks(struct stack *a, struct stack *b)
 {
     int i;
 
@@ -125,3 +125,5 @@ int print_stacks(struct stack *a, struct stack *b)
     }
     printf("\n");
 }
+
+*/

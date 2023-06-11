@@ -38,8 +38,10 @@ void push_max_to_end(void)
         reverse_rotate_ab(&a, 'a');
 }
 
-int simple_sort(void)
+void simple_sort(void)
 {
+    if (is_stack_sorted(&a))
+        return;
 
     while (a.count > 3)
         push_min_to_stack_b();
@@ -90,12 +92,12 @@ int push_swap(int argc, char **argv)
         return (-1);
     if (init_stacks(argc, argv, &a, &b) == -1)
         return (-1);
-    print_stacks(&a, &b);
+    //print_stacks(&a, &b);
     if (a.size <= 5)
         simple_sort();
     if (a.size > 5)
         radix_sort();
-    print_stacks(&a, &b);
+    //print_stacks(&a, &b);
     free(a.stack_arr);
     free(b.stack_arr);
     return (0);
@@ -103,7 +105,6 @@ int push_swap(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-
     int return_value;
 
     return_value = push_swap(argc, argv);
