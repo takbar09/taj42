@@ -8,5 +8,6 @@
 int swap_ab(struct stack *s, char c);
 int push_ab(struct stack *a, struct stack *b, char c);
 int rotate_ab(struct stack *s, char c);
+int reverse_rotate_ab(struct stack *s, char c);
 
 #endif

@@ -1,5 +1,6 @@
 
 #include "commands.h"
+#include "stack.h"
 
 static int command_count = 0;
 
@@ -19,6 +20,7 @@ int swap_ab(struct stack *s, char c)
         printf("sb\n");
 
     command_count++;
+    printf("Comamnd count %d\n", command_count);
     return (0);
 }
 
@@ -40,6 +42,7 @@ int push_ab(struct stack *a, struct stack *b, char c)
         printf("pb\n");
     }
     command_count++;
+    printf("Comamnd count %d\n", command_count);
     return(0);    
 }
 
@@ -56,29 +59,24 @@ int rotate_ab(struct stack *s, char c)
         printf("rb\n");
 
     command_count++;
+    printf("Comamnd count %d\n", command_count);
     return (0);
 }
 
 
-/*int rra(void)
+int reverse_rotate_ab(struct stack *s, char c)
 {
     int number;
     
-    number = a.stack_arr[a.count-1];
-    a.count--;
-    push_a(number);
+    number = s->stack_arr[s->count-1];
+    s->count--;
+    push(s, number);    
+    if (c == 'a')
+        printf("rra\n");
+    if (c == 'b')
+        printf("rrb\n");
+    
+    command_count++;
+    printf("Comamnd count %d\n", command_count);
+    return (0);
 }
-
-int rrb(void)
-{
-    int number;
-    number = b.stack_arr[b.count-1];
-    b.count--;
-    push_b(number);
-}
-
-int rrr(void)
-{
-    rra();
-    rrb();
-}*/

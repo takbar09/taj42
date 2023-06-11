@@ -52,10 +52,12 @@ int check_in_range(int argc, char **argv)
         if (length > 10)
             return (-1);
         if (length == 10)
+        {
             if (negative_number && strcmp(str, "2147483648") > 0)
                 return (-1);
             else if (strcmp(str, "2147483647") > 0)
                 return (-1);
+        }
         i++;
     }
     return (0);
@@ -77,6 +79,7 @@ int check_duplicates(int argc, char **argv)
         }       
         i++;
     }
+    return (0);
 }
 
 int check_args(int argc, char **argv)

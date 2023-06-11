@@ -14,6 +14,8 @@ struct stack
 int push(struct stack *s, int number);
 int pop(struct stack *s, int *number);
 int is_stack_sorted(struct stack *s);
+int stack_smallest_index(struct stack *s);
+int stack_largest_index(struct stack *s);
 
 // to be removed later.
 int print_stacks(struct stack *a, struct stack *b);

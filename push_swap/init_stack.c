@@ -81,18 +81,17 @@ int map_temp_to_stacka(struct stack *a, int *temp, int size)
 
     greatst_index = greatest_index(temp, size);
     a->stack_arr[greatst_index] = size-1;
-    printf("Map %d to  %d\n", temp[greatst_index], size-1);
 
     i = 0;
     while (i < (size - 1))
     {
         index = smallest_index(temp, size);
         a->stack_arr[index] = i;
-        printf("Map %d to  %d\n", temp[index], i);
         temp[index] = temp[greatst_index];
         i++;    
     }
     a->count = a->size;
+    return (0);
 }
 
 int init_stacks(int argc, char **argv, struct stack *a, struct stack *b)
@@ -119,4 +118,5 @@ int init_stacks(int argc, char **argv, struct stack *a, struct stack *b)
     }
     map_temp_to_stacka(a, temp, a->size);
     free(temp);
+    return (0);
 }
