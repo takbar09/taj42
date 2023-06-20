@@ -94,13 +94,13 @@ int map_temp_to_stacka(struct stack *a, int *temp, int size)
     return (0);
 }
 
-int init_stacks(int argc, char **argv, struct stack *a, struct stack *b)
+int init_stacks(int arg_count, char **args, struct stack *a, struct stack *b)
 {
     int i;
     int *temp;
-    a->size = argc - 1;
-    b->size = argc - 1;
-    temp = malloc(a->size * sizeof(int));
+    a->size = arg_count;
+    b->size = arg_count;
+    temp = malloc(arg_count * sizeof(int));
     a->stack_arr = malloc(a->size * sizeof(int));
     b->stack_arr = malloc(b->size * sizeof(int));
     if (!temp || !a->stack_arr  || !b->stack_arr)
@@ -113,7 +113,7 @@ int init_stacks(int argc, char **argv, struct stack *a, struct stack *b)
     i = 0;
     while (i < a->size)
     {
-        temp[i] = ft_atoi(argv[i+1]);
+        temp[i] = ft_atoi(args[i]);
         i++;
     }
     map_temp_to_stacka(a, temp, a->size);

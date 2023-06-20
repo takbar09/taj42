@@ -101,7 +101,7 @@ int stack_largest_index(struct stack *s)
     return largest_index;
 }
 
-/*
+
 void print_stacks(struct stack *a, struct stack *b)
 {
     int i;
@@ -126,4 +126,3 @@ void print_stacks(struct stack *a, struct stack *b)
     printf("\n");
 }
 
-*/

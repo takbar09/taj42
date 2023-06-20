@@ -5,6 +5,6 @@
 #include <stdlib.h>
 #include "stack.h"
 
-int init_stacks(int argc, char **argv, struct stack *a, struct stack *b);
+int init_stacks(int arg_count, char **args, struct stack *a, struct stack *b);
 
 #endif

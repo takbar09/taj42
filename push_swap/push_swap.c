@@ -9,6 +9,76 @@
 static struct stack a;
 static struct stack b;
 
+int ft_count_word(char const *s, char c)
+{
+	int i;
+	int cnt;
+	i = 0;
+	cnt = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+		i++;
+		else
+		{
+			cnt++;
+			while (s[i] && s[i] != c)
+			i++;
+		}
+	}
+	return (cnt);
+}
+char *ft_word_make(char *word, char const *s, int k, int word_len)
+{
+	int i;
+	i = 0;
+	while (word_len >0)
+	word[i++] = s[k - word_len--];
+	word [i] = '\0';
+	return (word);
+}
+char **ft_split2(char **res, char const *s, char c, int num_word)
+{
+	int i;
+	int k;
+	int word_len;
+
+	i = 0;
+	k = 0;
+	word_len = 0;
+	while (s[k] && i < num_word)
+	{
+		while (s[k] && s[k] == c)
+		k++;
+		while (s[k] && s[k] != c)
+		{
+			k++;
+			word_len++;
+		}
+		if (!(res[i] = (char *)malloc(sizeof(char) * (word_len + 1))))
+		return (NULL);
+		ft_word_make(res[i], s, k, word_len);
+		word_len = 0;
+		i++;
+	}
+	res[i] = 0;
+	return (res);
+}
+
+char	**ft_split(const char *s, char c)
+{
+	int num_word;
+	char **res;
+
+	if (s == 0)
+	return (NULL);
+	num_word = ft_count_word(s, c);
+	if (!(res = (char **)malloc(sizeof(char *) * (num_word + 1))))
+	return (NULL);
+	ft_split2(res, s, c, num_word);
+	return (res);
+}
+
 void push_min_to_stack_b(void)
 {
     int smallest_index;
@@ -84,20 +154,20 @@ int radix_sort(void)
     return (0);
 }
 
-int push_swap(int argc, char **argv)
+int push_swap(int arg_count, char **args)
 {
-    if (argc == 1)
-        return (0);
-    if (check_args(argc, argv) == -1)
+    if (!args)
         return (-1);
-    if (init_stacks(argc, argv, &a, &b) == -1)
+    if (check_args(arg_count, args) == -1)
+        return (-1);
+    if (init_stacks(arg_count, args, &a, &b) == -1)
         return (-1);
     //print_stacks(&a, &b);
     if (a.size <= 5)
         simple_sort();
     if (a.size > 5)
         radix_sort();
-    //print_stacks(&a, &b);
+    print_stacks(&a, &b);
     free(a.stack_arr);
     free(b.stack_arr);
     return (0);
@@ -106,8 +176,22 @@ int push_swap(int argc, char **argv)
 int	main(int argc, char **argv)
 {
     int return_value;
+    char **args;
+    int arg_count;
 
-    return_value = push_swap(argc, argv);
+    if (argc == 1)
+        return (0);
+    if (argc == 2)
+    {
+        arg_count = ft_count_word(argv[1], ' ');
+        args = ft_split(argv[1], ' ');
+    }
+    if (argc > 2)
+    {
+        arg_count = argc -1;
+        args = argv+1;
+    }
+    return_value = push_swap(arg_count, args);
     if (return_value == -1)
         printf ("Error\n");
     return (return_value);
