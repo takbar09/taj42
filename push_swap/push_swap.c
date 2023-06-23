@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   push_swap.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: takbar <marvin@codam.nl>                     +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/06/23 15:50:45 by takbar        #+#    #+#                 */
+/*   Updated: 2023/06/23 16:49:33 by takbar        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,75 +20,106 @@
 static struct stack a;
 static struct stack b;
 
-int ft_count_word(char const *s, char c)
+/*
+static  char    **ft_mem_free(char **res)
 {
-	int i;
-	int cnt;
-	i = 0;
-	cnt = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-		i++;
-		else
-		{
-			cnt++;
-			while (s[i] && s[i] != c)
-			i++;
-		}
-	}
-	return (cnt);
-}
-char *ft_word_make(char *word, char const *s, int k, int word_len)
-{
-	int i;
-	i = 0;
-	while (word_len >0)
-	word[i++] = s[k - word_len--];
-	word [i] = '\0';
-	return (word);
-}
-char **ft_split2(char **res, char const *s, char c, int num_word)
-{
-	int i;
-	int k;
-	int word_len;
+    int i;
 
-	i = 0;
-	k = 0;
-	word_len = 0;
-	while (s[k] && i < num_word)
-	{
-		while (s[k] && s[k] == c)
-		k++;
-		while (s[k] && s[k] != c)
-		{
-			k++;
-			word_len++;
-		}
-		if (!(res[i] = (char *)malloc(sizeof(char) * (word_len + 1))))
-		return (NULL);
-		ft_word_make(res[i], s, k, word_len);
-		word_len = 0;
-		i++;
-	}
-	res[i] = 0;
-	return (res);
+    i = 0;
+    while (res[i])
+    {
+        free(res[i]);
+        i++;
+    }
+    free(res);
+    return (NULL);
+}*/
+
+static  int ft_count_word(char const *s, char c)
+{
+    int i;
+    int cnt;
+
+    i = 0;
+    cnt = 0;
+    while (s[i])
+    {
+        if (s[i] == c)
+        i++;
+        else
+        {
+            cnt++;
+            while (s[i] && s[i] != c)
+            i++;
+        }
+    }
+    return (cnt);
 }
 
-char	**ft_split(const char *s, char c)
-{
-	int num_word;
-	char **res;
+/*
 
-	if (s == 0)
-	return (NULL);
-	num_word = ft_count_word(s, c);
-	if (!(res = (char **)malloc(sizeof(char *) * (num_word + 1))))
-	return (NULL);
-	ft_split2(res, s, c, num_word);
-	return (res);
+static  char    *ft_word_make(char *word, char const *s, int k, int word_len)
+{
+    int i;
+
+    i = 0;
+    while (word_len > 0)
+    {
+        word[i] = s[k - word_len];
+        i++;
+        word_len--;
+    }
+    word [i] = '\0';
+    return (word);
 }
+
+static  char    **ft_split2(char **res, char const *s, char c, int num_word)
+{
+    int i;
+    int k;
+    int word_len;
+
+    i = 0;
+    k = 0;
+    word_len = 0;
+    while (s[k] && i < num_word)
+    {
+        while (s[k] && s[k] == c)
+            k++;
+        while (s[k] && s[k] != c)
+        {
+            k++;
+            word_len++;
+        }
+        res[i] = (char *) malloc(sizeof(char) * (word_len + 1));
+        if (!(res[i]))
+            return (NULL);
+        ft_word_make(res[i], s, k, word_len);
+        word_len = 0;
+        i++;
+    }
+    res[i] = 0;
+    return (res);
+}
+
+char    **ft_split(const char *s, char c)
+{
+    int     num_word;
+    char    **res;
+
+    if (s == 0)
+        return (NULL);
+    num_word = ft_count_word(s, c);
+    res = (char **) malloc(sizeof(char *) * (num_word + 1));
+    if (!(res))
+        return (NULL);
+    if (!ft_split2(res, s, c, num_word))
+    {
+        ft_mem_free(res);
+        return (NULL);
+    }
+    return (res);
+} */
 
 void push_min_to_stack_b(void)
 {
@@ -162,12 +204,12 @@ int push_swap(int arg_count, char **args)
         return (-1);
     if (init_stacks(arg_count, args, &a, &b) == -1)
         return (-1);
-    //print_stacks(&a, &b);
+    print_stacks(&a, &b);
     if (a.size <= 5)
         simple_sort();
     if (a.size > 5)
         radix_sort();
-    print_stacks(&a, &b);
+   // print_stacks(&a, &b);
     free(a.stack_arr);
     free(b.stack_arr);
     return (0);

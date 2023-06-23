@@ -1,6 +1,7 @@
 
 #include "init_stack.h"
 
+/*
 int	ft_atoi(const char *str)
 {
 	int	i;
@@ -27,7 +28,7 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (sign * result);
-}
+} */
 
 int smallest_index(int *temp, int size)
 {

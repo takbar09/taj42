@@ -119,8 +119,7 @@ void print_stacks(struct stack *a, struct stack *b)
     i = 0;
     while(i < b->count)
     {
-        printf("0x%x, ", b->stack_arr[i]);
-        
+        printf("0x%x, ", b->stack_arr[i]);        
         i++;
     }
     printf("\n");
