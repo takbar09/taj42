@@ -1,106 +1,113 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   stack.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: takbar <marvin@codam.nl>                     +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/06/25 16:48:35 by takbar        #+#    #+#                 */
+/*   Updated: 2023/06/25 19:01:03 by takbar        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
 #include "stack.h"
 
-int push(struct stack *s, int number)
+int	push(struct stack *s, int number)
 {
-    int i;
- 
-    if (s->count >= s->size)
-        return (-1);
-    
-    if (s->count == 0)
-    {
-        s->stack_arr[0] = number;
-        s->count++;
-        return (0);
-    }
+	int	i;
 
-    i = s->count;       
-    while (i > 0)
-    {
-        s->stack_arr[i] = s->stack_arr[i-1];
-        i--;
-    }
-    s->stack_arr[0] = number;
-    s->count++;
-    return 0;
+	if (s->count >= s->size)
+		return (-1);
+	if (s->count == 0)
+	{
+		s->stack_arr[0] = number;
+		s->count++;
+		return (0);
+	}
+	i = s->count;
+	while (i > 0)
+	{
+		s->stack_arr[i] = s->stack_arr[i - 1];
+		i--;
+	}
+	s->stack_arr[0] = number;
+	s->count++;
+	return (0);
 }
 
-int pop(struct stack *s, int *number)
+int	pop(struct stack *s, int *number)
 {
-    int i;
+	int	i;
 
-    if (s->count <= 0)
-        return -1;
-
-    *number = s->stack_arr[0];
-
-    i = 0; 
-    while (i < s->count)
-    {
-        s->stack_arr[i] = s->stack_arr[i + 1];
-        i++;
-    }
-    s->count--;
-    return (0);
+	if (s->count <= 0)
+		return (-1);
+	*number = s->stack_arr[0];
+	i = 0;
+	while (i < s->count)
+	{
+		s->stack_arr[i] = s->stack_arr[i + 1];
+		i++;
+	}
+	s->count--;
+	return (0);
 }
 
-int is_stack_sorted(struct stack *s)
+int	is_stack_sorted(struct stack *s)
 {
-    int i = 1;
-    while (i < s->count)
-    {
-        if (s->stack_arr[i-1] > s->stack_arr[i])
-            return (0);
-        i++;
-    }
-    return (1);
+	int	i;
+
+	i = 1;
+	while (i < s->count)
+	{
+		if (s->stack_arr[i - 1] > s->stack_arr[i])
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-int stack_smallest_index(struct stack *s)
+int	stack_smallest_index(struct stack *s)
 {
-    int i;
-    int smallest;
-    int smallest_index;
+	int	i;
+	int	smallest;
+	int	smallest_index;
 
-    i = 1;
-    smallest = s->stack_arr[0];
-    smallest_index = 0;
-    while (i < s->count)
-    {
-        if (s->stack_arr[i] < smallest)
-        {
-            smallest = s->stack_arr[i];
-            smallest_index = i;
-        }   
-        i++;
-    }
-    return smallest_index;
+	i = 1;
+	smallest = s->stack_arr[0];
+	smallest_index = 0;
+	while (i < s->count)
+	{
+		if (s->stack_arr[i] < smallest)
+		{
+			smallest = s->stack_arr[i];
+			smallest_index = i;
+		}
+		i++;
+	}
+	return (smallest_index);
 }
 
-int stack_largest_index(struct stack *s)
+int	stack_largest_index(struct stack *s)
 {
-    int i;
-    int largest;
-    int largest_index;
+	int	i;
+	int	largest;
+	int	largest_index;
 
-    i = 1;
-    largest = s->stack_arr[0];
-    largest_index = 0;
-
-    while (i < s->count)
-    {
-        if (s->stack_arr[i] > largest)
-        {
-            largest = s->stack_arr[i];
-            largest_index = i;
-        }   
-        i++;
-    }
-    return largest_index;
+	i = 1;
+	largest = s->stack_arr[0];
+	largest_index = 0;
+	while (i < s->count)
+	{
+		if (s->stack_arr[i] > largest)
+		{
+			largest = s->stack_arr[i];
+			largest_index = i;
+		}
+		i++;
+	}
+	return (largest_index);
 }
-
 
 void print_stacks(struct stack *a, struct stack *b)
 {
@@ -124,4 +131,3 @@ void print_stacks(struct stack *a, struct stack *b)
     }
     printf("\n");
 }
-

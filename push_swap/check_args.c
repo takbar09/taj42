@@ -6,7 +6,7 @@
 /*   By: takbar <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/23 17:03:27 by takbar        #+#    #+#                 */
-/*   Updated: 2023/06/23 17:35:22 by takbar        ########   odam.nl         */
+/*   Updated: 2023/06/25 17:39:21 by takbar        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -25,7 +25,7 @@ int	check_digits(int arg_count, char **args)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	while (i < arg_count)
 	{
@@ -46,7 +46,7 @@ int	check_digits(int arg_count, char **args)
 int	in_range(int negative_number, char *str)
 {
 	int		length;
-	
+
 	length = ft_strlen(str);
 	if (length > 10)
 		return (-1);
@@ -65,7 +65,7 @@ int	check_in_range(int arg_count, char **args)
 	int		i;
 	char	*str;
 	int		negative_number;
-	
+
 	i = 0;
 	while (i < arg_count)
 	{
@@ -76,7 +76,7 @@ int	check_in_range(int arg_count, char **args)
 		if (str[0] == '-' || str[0] == '+')
 			str++;
 		if (in_range(negative_number, str) == -1)
-		    return (-1);
+			return (-1);
 		i++;
 	}
 	return (0);
@@ -86,7 +86,7 @@ int	check_duplicates(int arg_count, char **args)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	while (i < arg_count)
 	{

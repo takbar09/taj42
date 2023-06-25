@@ -6,7 +6,7 @@
 #    By: takbar <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/01/22 14:12:19 by takbar        #+#    #+#                  #
-#    Updated: 2023/06/23 16:32:49 by takbar        ########   odam.nl          #
+#    Updated: 2023/06/25 18:58:56 by takbar        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = push_swap
 LIBFT = libft.a
 PRINTF = libftprintf.a
 
-SRCF = check_args.c commands.c init_stack.c push_swap.c stack.c
+SRCF = check_args.c commands.c init_stack.c push_swap.c stack.c simple_sort.c
 
 OBJF = $(SRCF:.c=.o)
 
