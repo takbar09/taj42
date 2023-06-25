@@ -43,10 +43,26 @@ int	check_digits(int arg_count, char **args)
 	return (0);
 }
 
+int	in_range(int negative_number, char *str)
+{
+	int		length;
+	
+	length = ft_strlen(str);
+	if (length > 10)
+		return (-1);
+	if (length == 10)
+	{
+		if (negative_number && strcmp(str, "2147483648") > 0)
+			return (-1);
+		else if (strcmp(str, "2147483647") > 0)
+			return (-1);
+	}
+	return (0);
+}
+
 int	check_in_range(int arg_count, char **args)
 {
 	int		i;
-	int		length;
 	char	*str;
 	int		negative_number;
 	
@@ -59,16 +75,8 @@ int	check_in_range(int arg_count, char **args)
 			negative_number = 1;
 		if (str[0] == '-' || str[0] == '+')
 			str++;
-		length = ft_strlen(str);
-		if (length > 10)
-			return (-1);
-		if (length == 10)
-		{
-			if (negative_number && strcmp(str, "2147483648") > 0)
-				return (-1);
-			else if (strcmp(str, "2147483647") > 0)
-				return (-1);
-		}
+		if (in_range(negative_number, str) == -1)
+		    return (-1);
 		i++;
 	}
 	return (0);
