@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "MLX42",
+			"path": "."
+		},
+		{
+			"name": "test_maps",
+			"path": "../Downloads/test_maps"
+		}
+	],
+	"settings": {}
+}
