@@ -6,7 +6,7 @@
 /*   By: takbar <takbar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:07:14 by takbar            #+#    #+#             */
-/*   Updated: 2023/07/30 17:23:18 by takbar        ########   odam.nl         */
+/*   Updated: 2023/07/30 19:02:19 by takbar        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ int	*parse_line(char *line, t_data *data)
 		if (row[i] < data->min)
 			data->min = row[i];
 	}
+	ft_mem_free(words);
 	return (row);
 }
 // returns a map struct with array storing X-Y-Z values from file
@@ -188,16 +189,16 @@ t_data	*parse_map(t_data *data, char *filename)
 
 	i = 0;
 	data->height = get_height(filename);
-	printf("data->height = %d\n", data->height);
+    printf("data->height = %d\n", data->height);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		printf("Cannot read from file in parse_map");
+	line = get_next_line(fd);
 	data->width = count_words(line, ' ');
 	printf("data->width = %d\n", data->width);
-	data->z_matrix = malloc(sizeof(int **) * data->height);
+	data->z_matrix = malloc(sizeof(int *) * data->height);
 	if (!data->z_matrix)
 		printf("Allocation failed in parse_map");
-	line = get_next_line(fd);
 	while (line != NULL)
 	{
 		data->z_matrix[i] = parse_line(line, data);
