@@ -6,39 +6,36 @@
 #    By: takbar <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/01/22 14:12:19 by takbar        #+#    #+#                  #
-#    Updated: 2023/08/05 17:46:40 by takbar        ########   odam.nl          #
+#    Updated: 2023/07/07 17:01:36 by takbar        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
+NAME	:= Game
+CFLAGS	:= -Wextra -Wall -Werror -Wunreachable-code -Ofast
+LIBMLX	:= ./lib/MLX42
 
-NAME = fdf
-LIBFT = libft.a
-PRINTF = libftprintf.a
+HEADERS	:= -I ./include -I $(LIBMLX)/include
+LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
+SRCS	:= $(shell find ./src -iname "*.c")
+OBJS	:= ${SRCS:.c=.o}
 
-SRCF = fdf.c read.c 
+all: libmlx $(NAME)
 
-OBJF = $(SRCF:.c=.o)
+libmlx:
+	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
 
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra
-INCLUDE = -I include
+%.o: %.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
 
-all: $(NAME)
-
-$(NAME) : $(OBJF)
-	@make -C libft
-	@make -C libft/ft_printf
-	$(CC) $(CFLAGS) $(OBJF) $(INCLUDE) libft/$(LIBFT) libft/ft_printf/$(PRINTF) -o $(NAME)
+$(NAME): $(OBJS)
+	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
 
 clean:
-	@make clean -C libft
-	@make clean -C libft/ft_printf
-	rm -f $(OBJF)
+	@rm -f $(OBJS)
+	@rm -f $(LIBMLX)/build
 
 fclean: clean
-	@make fclean -C libft
-	@make fclean -C libft/ft_printf
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
-re: fclean all
+re: clean all
 
-.PHONY: all clean fclean re
+.PHONY: all, clean, fclean, re, libmlx

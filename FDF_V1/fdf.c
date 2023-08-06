@@ -6,7 +6,7 @@
 /*   By: takbar <takbar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 15:12:13 by takbar            #+#    #+#             */
-/*   Updated: 2023/07/30 17:15:18 by takbar           ###   ########.fr       */
+/*   Updated: 2023/08/06 15:30:15 by takbar        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fdf.h"
+#include "libft/libft.h"
 
 /*int deal_key(int key, void *data)
 {
@@ -31,7 +32,7 @@ t_data	*data_init(void)
 
 	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)
-		printf("Error allocating map in map_init");
+		ft_printf("Error allocating map in map_init");
 	data->height = 0;
 	data->width = 0;
 	data->z_matrix = NULL;
@@ -70,11 +71,17 @@ int main(int argc, char **argv)
 	t_data *data;
 
 	data = data_init();
+	if (argc != 2)
+		ft_printf("Error\n");
 	if (!argv[1])
 		return (0);
 	data = parse_map(data, argv[1]);
-	
-	int i;
+	data->mlx_ptr = mlx_init();
+	data->win_prt = mlx_new_window(data->mlx_ptr, 1000, 1000, "FDF");
+	void drawLine(10, 10, 600, 300, data);
+	mlx_key_hook(win_ptr, deal_key, NULL);
+	mlx_loop(mlx_ptr);
+/*	int i;
 	int j;
 
 	i = 0;
@@ -83,11 +90,12 @@ int main(int argc, char **argv)
 		j = 0;
 		while (j < data->width)
 		{
-			printf("%d ", data->z_matrix[i][j]);
+			ft_printf("%d ", data->z_matrix[i][j]);
 			j++;
 		}
-		printf("\n");
+		ft_printf("\n");
 		i++;
 	}
-	printf("success");
+	system("leaks fdf");
+	ft_printf("success");*/
 }
