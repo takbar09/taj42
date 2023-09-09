@@ -6,13 +6,14 @@
 /*   By: takbar <takbar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:07:14 by takbar            #+#    #+#             */
-/*   Updated: 2023/08/05 19:20:35 by takbar        ########   odam.nl         */
+/*   Updated: 2023/09/09 17:38:35 by takbar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "fdf.h"
 #include "get_next_line.h"
 //#include "libft/libft.h"
@@ -208,5 +209,6 @@ void parse_map(t_data *data, char *filename)
 		line = get_next_line(fd);
 	}
 	close(fd);
+    write(1, "Sucess", 6);
 	return;
 }

@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   draw.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: takbar <marvin@codam.nl>                     +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/08/06 11:15:50 by takbar        #+#    #+#                 */
-/*   Updated: 2023/08/06 18:58:16 by takbar        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: takbar <takbar@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/06 11:15:50 by takbar            #+#    #+#             */
+/*   Updated: 2023/09/09 17:58:05 by takbar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "fdf.h"
 #include "stdio.h"
 #include <math.h>
@@ -67,9 +68,11 @@ void prepare_draw_point(int x, int y, t_data *data, int inc_x)
 	projection(&data->p2, data->angle);
 	data->p2.x += data->x_offset+300;
 	data->p2.y += data->y_offset/2;
-	data->color = (data->p1.z || data->p2.z) ? 0xFFFFFF : 0xBBFAFF;
-	data->color = (data->p2.z != data->p1.z) ? 0xFFFFFF : data->color;
-	
+	data->color = (data->p1.z || data->p2.z) ? 0xFFFFFFFF : 0xBBFAFFFF;
+	data->color = (data->p2.z != data->p1.z) ? 0xFFFFFFFF : data->color;
+	// 0xffffff
+	// 0x00ffffff
+	// bit-wise operations to be used for map colors
 
 	return;
 }
