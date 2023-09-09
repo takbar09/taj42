@@ -18,84 +18,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fdf.h"
-#include "libft/libft.h"
 
-/*int deal_key(int key, void *data)
+void init_data (t_data *data, char *filename)
 {
-	printf("%d", key);
-	return (0);
-}*/
-// initializes map for usage
-t_data	*data_init(void)
-{
-	t_data	*data;
-
-	data = (t_data *)malloc(sizeof(t_data));
-	if (!data)
-		ft_printf("Error allocating map in map_init");
-	data->height = 0;
-	data->width = 0;
-	data->z_matrix = NULL;
-	data->max = 0;
-	data->min = 0;
-	return (data);
+	data->win_ptr = 0;
+    data->mlx_ptr = 0;
+    data->scale = 50;
+	data->angle = 0.523599;
+	data->x_offset = 200;
+	data->y_offset = 200;
+    parse_map(data, filename);
 }
-/*int main (int argc, char **argv)
+
+int init_window(t_data *data)
 {
-	t_data *data;
+	mlx_t* mlx;
+    mlx_image_t* image;
+	if (!(mlx = mlx_init(data->max_x*data->scale*1.3 + data->x_offset, data->max_y*data->scale*1.3 + data->y_offset, "MLX42", true)))
+		return(-1);
 
-	data = (t_data*)malloc(sizeof(t_data));
-	if (!argv[1])
-		return (0);
-	read_file(argv[1], data);
-
-	int i;
-	int j;
-
-	i = 0;
-	while (i < data->height)
+	if (!(image = mlx_new_image(mlx, data->max_x*data->scale*1.3 + data->x_offset, data->max_y*data->scale*1.3+data->y_offset)))
 	{
-		j = 0;
-		while (j < data->width)
-		{
-			printf("%d ", data->z_matrix[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
+		mlx_close_window(mlx);
+		return(-1);
 	}
-	printf("success");
-}*/
-int main(int argc, char **argv)
-{
-	t_data *data;
+	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
+	{
+		mlx_close_window(mlx);
+		return(-1);
+	}
+	data->mlx_ptr = mlx;
+	data->win_ptr = image;
+	return (0);
+}
 
-	data = data_init();
+int main(int argc, char **argv) {
+    t_data data;
+
 	if (argc != 2)
-		ft_printf("Error\n");
+		printf("Error\n");
 	if (!argv[1])
 		return (0);
-	data = parse_map(data, argv[1]);
-	data->mlx_ptr = mlx_init();
-	data->win_prt = mlx_new_window(data->mlx_ptr, 1000, 1000, "FDF");
-	void drawLine(10, 10, 600, 300, data);
-	mlx_key_hook(win_ptr, deal_key, NULL);
-	mlx_loop(mlx_ptr);
-/*	int i;
-	int j;
 
-	i = 0;
-	while (i < data->height)
-	{
-		j = 0;
-		while (j < data->width)
-		{
-			ft_printf("%d ", data->z_matrix[i][j]);
-			j++;
-		}
-		ft_printf("\n");
-		i++;
-	}
-	system("leaks fdf");
-	ft_printf("success");*/
+	init_data(&data, argv[1]);
+	if (init_window(&data) < 0)
+		return(-1);
+
+	draw(&data);
+	//mlx_loop_hook(mlx, draw, &data);
+	mlx_loop(data.mlx_ptr);
+	mlx_terminate(data.mlx_ptr);
+	return (-1);
 }

@@ -14,7 +14,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include "fdf.h"
-#include "libft/libft.h"
+#include "get_next_line.h"
+//#include "libft/libft.h"
 
 static  char    **ft_mem_free(char **res)
 {
@@ -163,13 +164,13 @@ int	*parse_line(char *line, t_data *data)
 	int		i;
 
 	words = ft_split(line, ' ');
-	row = malloc(sizeof(int) * data->width);
+	row = malloc(sizeof(int) * data->max_x);
 	//if (!row || !words)
 	//{
 	//	printf("ft_split or malloc failed in parse_line");
 	//}
 	i = -1;
-	while (++i < data->width)
+	while (++i < data->max_x)
 	{
 		row[i] = atoi(words[i]);
 		if (row[i] > data->max)
@@ -181,24 +182,24 @@ int	*parse_line(char *line, t_data *data)
 	return (row);
 }
 // returns a map struct with array storing X-Y-Z values from file
-t_data	*parse_map(t_data *data, char *filename)
+void parse_map(t_data *data, char *filename)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
 	i = 0;
-	data->height = get_height(filename);
-    ft_printf("data->height = %d\n", data->height);
+	data->max_y = get_height(filename);
+    printf("data->max_y = %d\n", data->max_y);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		ft_printf("Cannot read from file in parse_map");
+		printf("Cannot read from file in parse_map");
 	line = get_next_line(fd);
-	data->width = count_words(line, ' ');
-	ft_printf("data->width = %d\n", data->width);
-	data->z_matrix = malloc(sizeof(int *) * data->height);
+	data->max_x = count_words(line, ' ');
+	printf("data->max_x = %d\n", data->max_x);
+	data->z_matrix = malloc(sizeof(int *) * data->max_y);
 	if (!data->z_matrix)
-		ft_printf("Allocation failed in parse_map");
+		printf("Allocation failed in parse_map");
 	while (line != NULL)
 	{
 		data->z_matrix[i] = parse_line(line, data);
@@ -207,5 +208,5 @@ t_data	*parse_map(t_data *data, char *filename)
 		line = get_next_line(fd);
 	}
 	close(fd);
-	return (data);
+	return;
 }

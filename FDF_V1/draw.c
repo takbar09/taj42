@@ -9,108 +9,145 @@
 /*   Updated: 2023/08/06 18:58:16 by takbar        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+#include "fdf.h"
+#include "stdio.h"
+#include <math.h>
 
+void init_point(int x, int y, int z, t_point *p)
+{
+	p->x = x;
+	p->y = y;
+	p->z = z;
+}
+
+static void	draw_line(t_data *data)
+{
+	t_point	delta;
+	t_point	sign;
+	t_point	cur;
+	int	error[2];
+
+	delta.x = absolute(data->p2.x - data->p1.x);
+	delta.y = absolute(data->p2.y - data->p1.y);
+	sign.x = data->p1.x < data->p2.x ? 1 : -1;
+	sign.y = data->p1.y < data->p2.y ? 1 : -1;
+	error[0] = delta.x - delta.y;
+	cur = data->p1;
+	while (cur.x != data->p2.x || cur.y != data->p2.y)
+	{
+		mlx_put_pixel(data->win_ptr, cur.x, cur.y, data->color);
+		if ((error[1] = error[0] * 2) > -delta.y)
+		{
+			error[0] -= delta.y;
+			cur.x += sign.x;
+		}
+		if (error[1] < delta.x)
+		{
+			error[0] += delta.x;
+			cur.y += sign.y;
+		}
+	}
+}
+
+void prepare_draw_point(int x, int y, t_data *data, int inc_x)
+{
+	init_point(x, y, data->z_matrix[y][x], &data->p1);
+	scale(&data->p1, data);
+	projection(&data->p1, data->angle);
+	data->p1.x += data->x_offset+300;
+	data->p1.y += data->y_offset/2;
+
+	if (inc_x == 1)
+		x++;
+	else
+		y++;
+
+	init_point(x, y, data->z_matrix[y][x], &data->p2);
+	scale(&data->p2, data);
+	projection(&data->p2, data->angle);
+	data->p2.x += data->x_offset+300;
+	data->p2.y += data->y_offset/2;
+	data->color = (data->p1.z || data->p2.z) ? 0xFFFFFF : 0xBBFAFF;
+	data->color = (data->p2.z != data->p1.z) ? 0xFFFFFF : data->color;
+	
+
+	return;
+}
+
+void draw(void *d)
+{
+	t_data *data;
+	int		y;
+	int		x;
+
+	data = d;
+	y = 0;
+	while (y < data->max_y)
+	{
+		x = 0;
+		while (x < data->max_x)
+		{	
+			if (y+1 < data->max_y)
+			{
+				prepare_draw_point(x,y, data, 0);
+				draw_line(data);
+			}
+			if (x+1 < data->max_x)
+			{
+				prepare_draw_point(x,y, data, 1);
+				draw_line(data);
+			}
+				
+			x++;
+		}
+		y++;
+	}
+}
 /*
-#include "fdf.h"
-#include <math.h>
-#include <stdlib.h>>
-
-void drawLine(int x0, int y0, int x1, int y1, t_data *data) 
-{
-    int dx = abs(x1 - x0);
-    int dy = abs(y1 - y0);
-    int sx = (x0 < x1) ? 1 : -1; // Increment direction for X
-    int sy = (y0 < y1) ? 1 : -1; // Increment direction for Y
-    int err = dx - dy;
-
-    while ((x0 - x1) || (y0 - y1))
-   	{
-		mlx_pixel_put(data->mlx_ptr, data->win_ptr, x0, y0, 0xffffff)
-
-        // Draw pixel at (x0, y0) or do whatever you need with the X and Y values here
-        // For example: printf("x: %d, y: %d\n", x0, y0);
-
-        if (x0 == x1 && y0 == y1) {
-            break; // Exit the loop when the endpoint is reached
-        }
-
-        int e2 = 2 * err;
-
-        if (e2 > -dy) {
-            err -= dy;
-            x0 += sx; // Increment X
-        }
-
-        if (e2 < dx) {
-            err += dx;
-            y0 += sy; // Increment Y
-        }
-    }
-}*/
-
-#include "MLX42/include/MLX42/MLX42.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include "MLX42/include/MLX42/MLX42_Int.h"
-#include "fdf.h"
-
-// BUG: Linux may experience a red hue instead due to endiannes
-void mlx_draw_pixel(uint8_t* pixel, uint32_t color)
-{
-    *(pixel++) = (uint8_t)(color >> 24);
-    *(pixel++) = (uint8_t)(color >> 16);
-    *(pixel++) = (uint8_t)(color >> 8);
-    *(pixel++) = (uint8_t)(color & 0xFF);
-}
-
-//= Public =//
-
-void mlx_put_pixel(mlx_image_t* image, uint32_t x, uint32_t y, uint32_t color)
-{
-    MLX_NONNULL(image);
-    MLX_ASSERT(x < image->width, "Pixel is out of bounds");
-    MLX_ASSERT(y < image->height, "Pixel is out of bounds");
-
-    uint8_t* pixelstart = &image->pixels[(y * image->width + x) * BPP];
-    mlx_draw_pixel(pixelstart, color);
-}
-
-void drawLine(int x0, int y0, int x1, int y1, t_data *data) {
-    int dx = abs(x1 - x0);
-    int dy = abs(y1 - y0);
-    int sx = (x0 < x1) ? 1 : -1; // Increment direction for X
-    int sy = (y0 < y1) ? 1 : -1; // Increment direction for Y
-    int err = dx - dy;
-
-    while (1) {
-        // Draw pixel at (x0, y0) or do whatever you need with the X and Y values here
-        printf("x: %d, y: %d\n", x0, y0);
-		mlx_put_pixel(data->mlx_ptr, data->win_ptr, x0, y0, 0xffffff);
-
-        if (x0 == x1 && y0 == y1) {
-            break; // Exit the loop when the endpoint is reached
-        }
-
-        int e2 = 2 * err;
-
-        if (e2 > -dy) {
-            err -= dy;
-            x0 += sx; // Increment X
-        }
-
-        if (e2 < dx) {
-            err += dx;
-            y0 += sy; // Increment Y
-        }
-    }
-}
-
-int main() {
+int main(int argc, char **argv) {
     //int x0 = 1, y0 = 1; // Starting point
     //int x1 = 8, y1 = 5; // Ending point
-    t_data *data;
-    drawLine(1, 1, 8, 5, data);
+    t_data data;
+    data.win_ptr = 0;
+    data.mlx_ptr = 0;
+    mlx_image_t* image;
+    
+	
+	
+	mlx_t* mlx;
+    void parse_map(t_data *data, char *filename);
+    parse_map(&data, argv[1]);
+	data.scale = 50;
+	data.angle = .5;
+	data.x_offset = 200;
+	data.y_offset = 200;
 
-    return 0;
+	// Gotta error check this stuff
+	if (!(mlx = mlx_init(data.max_x*data.scale*1.3 + data.x_offset, data.max_y*data.scale*1.3 + data.y_offset, "MLX42", true)))
+	{
+		puts(mlx_strerror(mlx_errno));
+		return(-1);
+	}
+	if (!(image = mlx_new_image(mlx, data.max_x*data.scale*1.3 + data.x_offset, data.max_y*data.scale*1.3+data.y_offset)))
+	{
+		mlx_close_window(mlx);
+		puts(mlx_strerror(mlx_errno));
+		return(-1);
+	}
+	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
+	{
+		mlx_close_window(mlx);
+		puts(mlx_strerror(mlx_errno));
+		return(-1);
+	}
+
+	data.mlx_ptr = mlx;
+	data.win_ptr = image;
+	draw(&data);
+	//mlx_loop_hook(mlx, draw, &data);
+	
+	mlx_loop(mlx);
+	mlx_terminate(mlx);
+	return (-1);
 }
+*/
