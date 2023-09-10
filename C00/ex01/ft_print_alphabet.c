@@ -16,10 +16,15 @@ void	ft_print_alphabet(void)
 {
 	char	c;
 
-	c = 'a';
-	while (c <= 'z')
+	c = 97;
+	while (c <= 122)
 	{
 		write(1, &c, 1);
 		c++;
 	}
+	write(1, "\n", 1);
+}
+int main(void)
+{
+	ft_print_alphabet();
 }

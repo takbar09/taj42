@@ -83,6 +83,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*temp;
 
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (free(read_file_str), NULL);
 	if (!read_file_str)
@@ -101,6 +102,7 @@ char	*get_next_line(int fd)
 	}
 	temp = read_file_str;
 	read_file_str = ft_remove_read_line(read_file_str);
+	
 	return (free(temp), line);
 }
 /*

@@ -21,6 +21,7 @@ typedef struct point
 	int x;
 	int y;
 	int z;
+	int color;
 }t_point;
 
 typedef struct data
@@ -29,14 +30,17 @@ typedef struct data
 	int max_y;
 	int max;
 	int min;
-	int **z_matrix;
+	t_point **p_matrix;
 	int scale;
+	int z_scale;
 	double angle;
 	int x_offset;
 	int y_offset;
 	t_point p1;
 	t_point p2;
-	int color;
+	uint32_t color;
+	int window_x;
+	int window_y;
 	void	*mlx_ptr;
 	void	*win_ptr;
 }t_data;
@@ -47,7 +51,7 @@ int	get_height(char *filename);
 
 int	count_words(char *str, char c);
 
-int	*parse_line(char *line, t_data *data);
+t_point	*parse_line(char *line, t_data *data, int y);
 
 void parse_map(t_data *data, char *filename);
 
@@ -63,6 +67,11 @@ void scale(t_point *p, t_data *data);
 
 void projection(t_point *p, double angle);
 
+void calculate_scale(t_data *data);
+
+int clear_screen(t_data *data);
+
+void free_resources(t_data *data);
 
 #endif
 

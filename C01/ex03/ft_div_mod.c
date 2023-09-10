@@ -9,9 +9,7 @@
 /*   Updated: 2022/08/23 16:49:25 by takbar        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-/*#include<stdio.h>*/
-void	ft_div_mod(int a, int b, int *div, int *mod);
-
+#include<stdio.h>
 void	ft_div_mod(int a, int b, int *div, int *mod)
 
 {

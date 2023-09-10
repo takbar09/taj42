@@ -14,13 +14,17 @@
 void	ft_is_negative(int n)
 
 {
-	char	x;
-	char	y;
-
-	x = 'N';
-	y = 'P';
 	if (n < 0)
-		write (1, &x, 1);
+		write(1, "N", 1);
 	else
-		write (1, &y, 1);
+		write(1, "P", 1);
+	write(1, "\n", 1);
+}
+
+int main(void)
+{
+	int n;
+
+	n = 0;
+	ft_is_negative(n);
 }
