@@ -26,15 +26,16 @@ void calculate_scale(t_data *data){
 	max_z = 0;
 	while (y < data->max_y){
 		x = 0;
-		while (x < data->max_x){
+		while (x < data->max_x) {
 			if (absolute(data->p_matrix[y][x].z) > max_z)
 				max_z =  absolute(data->p_matrix[y][x].z);
 			x++;
 		}
 		y++;
 	}
-	if (max_z < 50)
-		data->z_scale = 50/max_z;
+	data->z_scale = 1;
+	if (max_z < 30)
+		data->z_scale = 30/max_z;
 }
 
 void scale(t_point *p, t_data *data){
@@ -49,5 +50,5 @@ void projection(t_point *p, double angle){
 	int prev_y = p->y;
 
 	p->x = (prev_x - prev_y) * cos(angle);
-	p->y = (prev_x + prev_y) * sin(0.55) - p->z;
+	p->y = (prev_x + prev_y) * sin(angle) - p->z;
 }

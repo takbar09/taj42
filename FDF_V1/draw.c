@@ -14,9 +14,13 @@
 #include "stdio.h"
 #include <math.h>
 
-int clear_screen(t_data *data){
+int clear_screen(t_data *data)
+{
+
 	mlx_delete_image(data->mlx_ptr, data->win_ptr);
-	if (!(data->win_ptr = mlx_new_image(data->mlx_ptr, data->window_x, data->window_y))){
+	data->win_ptr = mlx_new_image(data->mlx_ptr, data->window_x, data->window_y);
+	if (!(data->win_ptr))
+	{
 		mlx_close_window(data->mlx_ptr);
 		return(-1);
 	}
@@ -30,26 +34,26 @@ int clear_screen(t_data *data){
 static void	draw_line(t_data *data){
 	t_point	delta;
 	t_point	sign;
-	t_point	cur;
 	int	error[2];
 
 	delta.x = absolute(data->p2.x - data->p1.x);
 	delta.y = absolute(data->p2.y - data->p1.y);
-	sign.x = data->p1.x < data->p2.x ? 1 : -1;
-	sign.y = data->p1.y < data->p2.y ? 1 : -1;
+	sign = (t_point){-1, -1, 0, 0};
+	if (data->p1.x < data->p2.x)
+		sign.x = 1;
+	if (data->p1.y < data->p2.y)
+		sign.y = 1;
 	error[0] = delta.x - delta.y;
-	cur = data->p1;
-	while (cur.x != data->p2.x || cur.y != data->p2.y){
-		//printf("Pixel draw x=%d, y=%d\n", cur.x, cur.y);
-		if (cur.x > 0 && cur.y > 0)
-			mlx_put_pixel(data->win_ptr, cur.x, cur.y, data->color);
+	while (data->p1.x != data->p2.x || data->p1.y != data->p2.y){
+		if (data->p1.x > 0 && data->p1.y > 0)
+			mlx_put_pixel(data->win_ptr, data->p1.x, data->p1.y, data->color);
 		if ((error[1] = error[0] * 2) > -delta.y){
 			error[0] -= delta.y;
-			cur.x += sign.x;
+			data->p1.x += sign.x;
 		}
 		if (error[1] < delta.x){
 			error[0] += delta.x;
-			cur.y += sign.y;
+			data->p1.y += sign.y;
 		}
 	}
 }
@@ -66,17 +70,21 @@ void prepare_draw_point(int x, int y, t_data *data, int inc_x){
 		x++;
 	if (inc_x == 0)
 		y++;
-
 	data->p2 =  data->p_matrix[y][x];
-
 	//printf("Pixel2 before scaling x=%d, y=%d, z=%d\n", data->p2.x, data->p2.y, data->p2.z);
 	scale(&data->p2, data);
 	projection(&data->p2, data->angle);
 	data->p2.x += data->x_offset+300;
 	data->p2.y += data->y_offset/2;
 	//printf("Pixel2 after scaling x=%d, y=%d, z=%d\n", data->p2.x, data->p2.y, data->p2.z);
-	data->color = (data->p1.z || data->p2.z) ? 0xFFFFFFFF : 0xBBFAFF;
-	data->color = (data->p2.z != data->p1.z) ? 0xFFFFFF : data->color;
+	//data->color = (data->p1.z || data->p2.z) ? 0xFFFFFFFF : 0xBBFAFF;
+	//data->color = (data->p2.z != data->p1.z) ? 0xFFFFFF : data->color;
+	if ((data->p1.z || data->p2.z))
+		data->color = 0xFFFFFFFF; // white
+	else
+		data->color = 0xBBFAFF;
+	if ((data->p2.z != data->p1.z))
+		data->color = 0xFFFFFF;
 	if (data->p1.color != 0)
 		data->color = data->p1.color << 8 | 0xFF;
 	return;

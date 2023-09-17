@@ -22,13 +22,12 @@
 void init_data (t_data *data, char *filename){
 	data->win_ptr = 0;
     data->mlx_ptr = 0;
-    data->scale = 60;
-	data->z_scale = 1;
 	data->angle = 0.523599;
 	data->window_x = 1800;
 	data->window_y = 1200;
 	data->x_offset = 450;
 	data->y_offset = 100;
+	data->p_matrix = 0;
     parse_map(data, filename);
 	calculate_scale(data);
 }
@@ -36,7 +35,7 @@ void init_data (t_data *data, char *filename){
 int init_window(t_data *data){
 	mlx_t* mlx;
     mlx_image_t* image;
-	if (!(mlx = mlx_init(data->window_x, data->window_y, "MLX42", true)))
+	if (!(mlx = mlx_init(data->window_x, data->window_y, "FDF", true)))
 		return(-1);
 
 	if (!(image = mlx_new_image(mlx, data->window_x, data->window_y))){
@@ -52,13 +51,12 @@ int init_window(t_data *data){
 	return (0);
 }
 
-//void close(void* param){
-	//t_data *data;
+void close_handler(void* param){
+	t_data *data;
 	
-	//printf("Key handler...called\n");
-	//data = param;
-	//free_resources(data);
-//}
+	data = param;
+	free_resources(data);
+}
 
 void key_handler(void* param){
 	t_data *data = param;
@@ -84,7 +82,8 @@ void key_handler(void* param){
 	}
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
     t_data data;
 
 	if (argc != 2)
@@ -100,8 +99,9 @@ int main(int argc, char **argv){
 	}
 	mlx_loop_hook(data.mlx_ptr, draw, &data);
 	mlx_loop_hook(data.mlx_ptr, key_handler, &data);
-	//mlx_close_hook(data.mlx_ptr, close, &data);
+	mlx_close_hook(data.mlx_ptr, close_handler, &data);
 	mlx_loop(data.mlx_ptr);
 	mlx_terminate(data.mlx_ptr);
+	system("leaks a.out");
 	return (0);
 }

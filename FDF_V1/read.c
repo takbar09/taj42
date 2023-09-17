@@ -168,7 +168,7 @@ t_point	*parse_line(char *line, t_data *data, int y){
         if (count_words(words[i], ',') > 1){
             comma_sep_words = ft_split(words[i], ',');
             row[i].z = atoi(comma_sep_words[0]);
-            row[i].color = strtol(comma_sep_words[1], NULL, 16);
+			row[i].color = ft_atoi_base(comma_sep_words[1]+2, 16);
             ft_mem_free(comma_sep_words);
         }
         else
