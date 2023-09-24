@@ -34,7 +34,7 @@ void calculate_scale(t_data *data){
 		y++;
 	}
 	data->z_scale = 1;
-	if (max_z < 30)
+	if (max_z < 30 && max_z > 0)
 		data->z_scale = 30/max_z;
 }
 

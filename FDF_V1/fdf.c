@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include "fdf.h"
 
-void init_data (t_data *data, char *filename){
+int init_data (t_data *data, char *filename){
 	data->win_ptr = 0;
     data->mlx_ptr = 0;
 	data->angle = 0.523599;
@@ -28,8 +28,10 @@ void init_data (t_data *data, char *filename){
 	data->x_offset = 450;
 	data->y_offset = 100;
 	data->p_matrix = 0;
-    parse_map(data, filename);
+    if (parse_map(data, filename) == -1)
+		return (-1);
 	calculate_scale(data);
+	return (0);
 }
 
 int init_window(t_data *data){
@@ -86,13 +88,13 @@ int main(int argc, char **argv)
 {
     t_data data;
 
-	if (argc != 2)
-		printf("Error\n");
-	if (!argv[1])
-		return (0);
+	if (check_cmd_line_args(argc, argv) == -1)
+		return (-1);
 
-	data.p_matrix = 0;
-	init_data(&data, argv[1]);
+	if (init_data(&data, argv[1]) == -1){
+		free_resources(&data);
+		return (-1);
+	}
 	if (init_window(&data) < 0){
 		free_resources(&data);
 		return(-1);

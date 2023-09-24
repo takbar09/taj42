@@ -120,6 +120,9 @@ int	get_max_y(char *filename){
 	char	*line;
 
 	fd = open(filename, O_RDONLY);
+    if (fd < 0){
+        return (-1);
+    }
 	y = 0;
 	line = get_next_line(fd);
 	while (line != NULL){
@@ -156,15 +159,18 @@ t_point	*parse_line(char *line, t_data *data, int y){
 	char	**words;
     char	**comma_sep_words;
 	int		i;
-    
-	words = ft_split(line, ' ');
+
 	row = malloc(sizeof(t_point) * data->max_x);
+    if (!row)
+    {
+        return (NULL);
+    } 
+	words = ft_split(line, ' ');
 	i = -1;
 	while (++i < data->max_x){
         row[i].x = i;
         row[i].y = y;
         row[i].color = 0;
-        //printf("Words  %s  count words=%d\n", words[i], count_words(words[i], ','));
         if (count_words(words[i], ',') > 1){
             comma_sep_words = ft_split(words[i], ',');
             row[i].z = atoi(comma_sep_words[0]);
@@ -173,7 +179,6 @@ t_point	*parse_line(char *line, t_data *data, int y){
         }
         else
             row[i].z = atoi(words[i]);
-        //printf("Read point x=%d, y=%d, z=%d, color=0x%x\n", row[i].x, row[i].y, row[i].z, row[i].color);
 	}
 	ft_mem_free(words);
 	return (row);
@@ -185,10 +190,8 @@ int get_max_x(char *filename){
     int max_x;
 	
     fd = open(filename, O_RDONLY);
-	if (fd < 0){
-        printf("Cannot read from file in parse_map");
+	if (fd < 0)
         return (-1);
-    }
 	line = get_next_line(fd);
 	max_x = count_words(line, ' ');
     close(fd);
@@ -203,13 +206,14 @@ int read_points(t_data *data, char *filename){
     fd = open(filename, O_RDONLY);
 	if (fd < 0)
         return (-1);
-
-	line = get_next_line(fd);
-    data->p_matrix = malloc(sizeof(t_point *) * data->max_y);
-	if (!data->p_matrix)
-		return (-1);
     i = 0;
-	while (line != NULL){
+	line = get_next_line(fd);
+    data->max_x = count_words(line, ' ');
+	while (i < data->max_y){
+        if (!line)
+            return (-1);
+        if (check_line(line, data) == -1)
+            return (-1);
 		data->p_matrix[i] = parse_line(line, data, i);
 		free(line);
 		i++;
@@ -220,12 +224,21 @@ int read_points(t_data *data, char *filename){
 }
 
 // returns a map struct with array storing X-Y-Z values from file
-void parse_map(t_data *data, char *filename){
-	data->max_y = get_max_y(filename);
-    data->max_x = get_max_x(filename);
+int  parse_map(t_data *data, char *filename){
+    int i;
 
+	data->max_y = get_max_y(filename);
+    if (data->max_y <= 0)
+        return (-1);
+    data->p_matrix = malloc(sizeof(t_point *) * data->max_y);
+	if (!data->p_matrix)
+		return (-1);
+    i = -1;
+    while (++i < data->max_y)
+        data->p_matrix[i] = NULL;
     printf("max_y = %d,  max_x=%d\n", data->max_y, data->max_x);
-    read_points(data, filename);
+    if (read_points(data, filename) == -1)
+        return(-1);
     write(1, "Sucess", 6);
-	return;
+	return (0);
 }

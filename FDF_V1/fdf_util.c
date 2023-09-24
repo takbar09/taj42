@@ -28,18 +28,19 @@ int get_max(int x1, int x2){
 
 void free_resources(t_data *data){
 	int i;
-	mlx_close_window(data->mlx_ptr);
+	if (data->mlx_ptr)
+		mlx_close_window(data->mlx_ptr);
 
 	i=0;
-	if (!data->p_matrix){
+	if (data->p_matrix){
 		while (i < data->max_y){
-			if(!data->p_matrix[i])
+			if(data->p_matrix[i])
 				free(data->p_matrix[i]);
+			i++;
 		}
+		free(data->p_matrix);
 	}
-	free(data->p_matrix);
 }
-
 
 int	ft_atoi_base(const char *str, int str_base)
 {

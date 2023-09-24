@@ -31,22 +31,30 @@ int clear_screen(t_data *data)
 	return (0);
 }
 
+static void prepare_delta_and_sign(t_point *delta, t_point *sign, t_data *data)
+{
+	delta->x = absolute(data->p2.x - data->p1.x);
+	delta->y = absolute(data->p2.y - data->p1.y);
+	sign->x = -1;
+	sign->y = -1;
+	if (data->p1.x < data->p2.x)
+		sign->x = 1;
+	if (data->p1.y < data->p2.y)
+		sign->y = 1;
+}
+
 static void	draw_line(t_data *data){
 	t_point	delta;
 	t_point	sign;
 	int	error[2];
 
-	delta.x = absolute(data->p2.x - data->p1.x);
-	delta.y = absolute(data->p2.y - data->p1.y);
-	sign = (t_point){-1, -1, 0, 0};
-	if (data->p1.x < data->p2.x)
-		sign.x = 1;
-	if (data->p1.y < data->p2.y)
-		sign.y = 1;
+	prepare_delta_and_sign(&delta, &sign, data);
 	error[0] = delta.x - delta.y;
 	while (data->p1.x != data->p2.x || data->p1.y != data->p2.y){
-		if (data->p1.x > 0 && data->p1.y > 0)
+		if ((data->p1.x > 0 && data->p1.y > 0) && 
+			(data->p1.x < data->window_x && data->p1.y < data->window_y)){
 			mlx_put_pixel(data->win_ptr, data->p1.x, data->p1.y, data->color);
+		}
 		if ((error[1] = error[0] * 2) > -delta.y){
 			error[0] -= delta.y;
 			data->p1.x += sign.x;
@@ -86,7 +94,7 @@ void prepare_draw_point(int x, int y, t_data *data, int inc_x){
 	if ((data->p2.z != data->p1.z))
 		data->color = 0xFFFFFF;
 	if (data->p1.color != 0)
-		data->color = data->p1.color << 8 | 0xFF;
+		data->color = data->p1.color << 8 | 0xff;
 	return;
 }
 

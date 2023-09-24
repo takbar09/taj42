@@ -51,7 +51,7 @@ int	count_words(char *str, char c);
 
 t_point	*parse_line(char *line, t_data *data, int y);
 
-void parse_map(t_data *data, char *filename);
+int parse_map(t_data *data, char *filename);
 
 int absolute(int x);
 
@@ -71,5 +71,10 @@ void free_resources(t_data *data);
 
 int	ft_atoi_base(const char *str, int str_base);
 
+int check_cmd_line_args(int argc, char **argv);
+
+int check_line(char *line, t_data *data);
+
+char    **ft_split(const char *s, char c);
 #endif
 
