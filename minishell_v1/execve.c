@@ -3,7 +3,7 @@
 
 int main() {
     char *binary = "/bin/ls"; // Full path to the 'ls' binary
-    char *argv[] = { "ls", "-l", "-h", "-a", NULL };
+    char *argv[] = { "ls", "-l", "-h", "-a", NULL};
     char *envp[] = { NULL }; // You can customize the environment if needed
 
     execve(binary, argv, envp);

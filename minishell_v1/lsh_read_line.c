@@ -5,7 +5,7 @@
 
 char *lsh_read_line(void) 
 {
-  char *line = readline(""); // Use readline to get input
+  char *line = readline("> "); // Use readline to get input
 
   if (line == NULL) 
   {

@@ -14,17 +14,21 @@ int lsh_execute(char **args)
   pid = fork();
   if (pid == 0) 
   {
+	char cmd[100] = "/bin/";
+	strcat(cmd, args[0]);
     // Child process
-    if (execve(args[0], args, NULL) == -1) 
+	printf("Aargument 0, %s\n", args[0]);
+
+    if (execve(cmd, args, NULL) == -1) 
     {
-      perror("lsh");
+      perror("lsh excev returned -1\n");
       exit(EXIT_FAILURE);
     }
   } 
   else if (pid < 0) 
   {
     // Error forking
-    perror("lsh");
+    perror("lsh Error forking\n");
   } 
   else 
   {
@@ -36,12 +40,13 @@ int lsh_execute(char **args)
 
       if (wpid == -1) 
       {
-        perror("lsh");
+        perror("lsh wait returned -1\n");
         exit(EXIT_FAILURE);
       }
 
       if (WIFEXITED(child_status) || WIFSIGNALED(child_status)) 
       {
+		printf("Child process terminated\n");
         break; // Child process has terminated or been signaled
       }
     }
@@ -176,8 +181,8 @@ char **lsh_split_line(char *line) {
 
 char *lsh_read_line(void) 
 {
-  char *line = readline(""); // Use readline to get input
-
+  char *line = readline("> "); // Use readline to get input
+  printf("Read line is %s\n", line);
   if (line == NULL) 
   {
     exit(EXIT_SUCCESS); // We received an EOF or an error
@@ -197,7 +202,6 @@ void lsh_loop(void)
 
   while (1) 
   {
-    printf("> ");
     line = lsh_read_line();
     args = lsh_split_line(line);
     status = lsh_execute(args);
